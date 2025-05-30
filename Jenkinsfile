@@ -1,30 +1,45 @@
+
 pipeline {
     agent any
+
     tools {
-        maven 'maven'
+        maven 'maven' // Must match the name configured in Jenkins global tools
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/darshan2610/mvn01.git'
+                git 'https://github.com/Darshan2610/mvnwebapp.git'
             }
         }
+
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
-        stage('Archive') {
+
+        stage('Archive WAR') {
             steps {
-                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+                // Archive the exact WAR file name, assuming it's MyMavenWebApp.war
+                archiveArtifacts artifacts: 'target/MyMavenWebApp.war', fingerprint: true
             }
         }
-        stage('Deploy') {
+
+        stage('Deploy with Ansible') {
             steps {
-                  sh 'mvn clean package'
-               ansiblePlaybook playbook: 'ansible/deploy.yml', inventory: 'ansible/hosts.ini'
-          
+                // Run deployment using Ansible (ensure Jenkins has Ansible plugin + rights)
+                ansiblePlaybook playbook: 'ansible/deploy.yml', inventory: 'ansible/hosts.ini'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
