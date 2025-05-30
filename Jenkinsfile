@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Darshan2610/mvnwebapp.git'
+                git 'https://github.com/Darshan2610/mvnweb01.git'
             }
         }
 
@@ -26,12 +26,12 @@ pipeline {
             }
         }
 
-        stage('Deploy with Ansible') {
-            steps {
+        //stage('Deploy with Ansible') {
+            //steps {
                 // Run deployment using Ansible (ensure Jenkins has Ansible plugin + rights)
-                ansiblePlaybook playbook: 'ansible/deploy.yml', inventory: 'ansible/hosts.ini'
-            }
-        }
+               // ansiblePlaybook playbook: 'ansible/deploy.yml', inventory: 'ansible/hosts.ini'
+            //}
+        //}
     }
 
     post {
