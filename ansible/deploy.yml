@@ -8,7 +8,10 @@
         dest: "/opt/tomcat/webapps/MyMavenWebApp.war"
         remote_src: no
 
-    - name: Restart Tomcat
-      systemd:
-        name: tomcat
-        state: restarted
+    - name: Restart Tomcat manually
+      become: yes
+      ansible.builtin.shell: |
+    /opt/tomcat/bin/shutdown.sh || true
+    sleep 5
+    /opt/tomcat/bin/startup.sh
+
